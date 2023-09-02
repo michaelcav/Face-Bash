@@ -1,16 +1,25 @@
-import { createContext, useEffect, useState, ReactNode } from "react";
+import { ReactNode, createContext, useEffect, useState } from "react";
 
-interface userType {
+interface User {
   id: number;
   name: string;
-  avatar: string
+  profilePic: string;
 }
 
-export const AuthContext = createContext<boolean | undefined>(undefined);
+interface AuthContextProps {
+  currentUser: User | null;
+  login: () => void;
+}
+
+export const AuthContext = createContext<AuthContextProps | undefined>(undefined)
 
 export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
-  const [currentUser, setCurrentUser] = useState(localStorage.getItem('user') || null)
-  
+  // Verifica se há um valor no localStorage antes de tentar fazer o parse
+  const storedUser = localStorage.getItem("user");
+  const initialUser = storedUser ? JSON.parse(storedUser) : null;
+
+  const [currentUser, setCurrentUser] = useState<User | null>(initialUser);
+
   const login = () => {
     //TO DO
     setCurrentUser({
@@ -26,7 +35,7 @@ export const AuthContextProvider = ({ children }: { children: ReactNode }) => {
   }, [currentUser]);
 
   return (
-    <AuthContext.Provider value={{  currentUser, login }}>
+    <AuthContext.Provider value={{ currentUser, login }}>
       {children}
     </AuthContext.Provider>
   );

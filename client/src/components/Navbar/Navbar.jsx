@@ -3,9 +3,12 @@ import React, {useContext} from 'react'
 import { Link } from 'react-router-dom'
 import './navbar.scss'
 import { DarkModeContext } from "../../context/darkModeContext";
+import { AuthContext } from "../../context/authContext";
+
 
 export default function Navbar() {
   const { toggle, darkMode } = useContext(DarkModeContext);
+  const { currentUser } = useContext(AuthContext);
 
   return (
     <div className="navbar">
@@ -32,8 +35,11 @@ export default function Navbar() {
         <EmailOutlined />
         <NotificationsOutlined />
         <div className="user">
-          <img src="https://avatars.githubusercontent.com/u/6902920?v=4" alt="" />
-          <span>Michael Carvalho</span>
+          <img
+            src={currentUser.profilePic}
+            alt=""
+          />
+          <span>{currentUser.name}</span>
         </div>
       </div>
     </div>

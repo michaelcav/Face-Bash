@@ -1,7 +1,8 @@
 import "./leftBar.scss";
-import Friends from "../../assets/1.png";
-import Groups from "../../assets/2.png";
-import Market from "../../assets/3.png";
+// import Friends from "../../assets/1.png";
+import { FaUser, FaUserGroup, FaShop } from "react-icons/fa6";
+// import Groups from "../../assets/2.png";
+// import Market from "../../assets/3.png";
 import Watch from "../../assets/4.png";
 import Memories from "../../assets/5.png";
 import Events from "../../assets/6.png";
@@ -12,11 +13,19 @@ import Messages from "../../assets/10.png";
 import Tutorials from "../../assets/11.png";
 import Courses from "../../assets/12.png";
 import Fund from "../../assets/13.png";
-
+import { useContext } from 'react'
+import { AuthContext } from '../../context/authContext';
 
 const LeftBar = () => {
+  const authContext = useContext(AuthContext);
 
+  if (!authContext) {
+   
+    return null;  
+  }
 
+  const { currentUser } = authContext;
+  console.log(currentUser)
   return (
     <div className="leftBar">
       <div className="container">
@@ -26,18 +35,18 @@ const LeftBar = () => {
               src="https://avatars.githubusercontent.com/u/6902920?v=4"
               alt=""
             />
-            <span>Michael Carvalho</span>
+            <span>{currentUser?.name}</span>
           </div>
           <div className="item">
-            <img src={Friends} alt="" />
+            < FaUser/>
             <span>Friends</span>
           </div>
           <div className="item">
-            <img src={Groups} alt="" />
+            <FaUserGroup/>
             <span>Groups</span>
           </div>
           <div className="item">
-            <img src={Market} alt="" />
+           <FaShop/>
             <span>Marketplace</span>
           </div>
           <div className="item">

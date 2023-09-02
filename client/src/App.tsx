@@ -1,3 +1,6 @@
+import { ReactNode, useContext } from "react";
+import { DarkModeContext } from "./context/darkModeContext";
+import { AuthContext } from "./context/authContext";
 import Login from "./pages/login/Login";
 import Register from "./pages/register/Register";
 import {
@@ -13,14 +16,19 @@ import RightBar from "./components/rightBar/RightBar";
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
 import "./style.scss";
-import { useContext } from "react";
-import { DarkModeContext } from "./context/darkModeContext";
-import { AuthContext } from "./context/authContext";
+// import auth from './context/auth'
+
+
 
 function App() {
-  const {currentUser} = useContext(AuthContext);
+  const authContext = useContext(AuthContext);
+  const dark = useContext(DarkModeContext)
 
-  const { darkMode } = useContext(DarkModeContext);
+  if (!dark) {
+    return null
+  }
+  const { darkMode } = dark;
+  const { currentUser } = authContext;
 
   const Layout = () => {
     return (
@@ -28,7 +36,7 @@ function App() {
         <Navbar />
         <div style={{ display: "flex" }}>
           <LeftBar />
-          <div style={{ flex: 6 }}>
+          <div style={{ flex: 4 }}>
             <Outlet />
           </div>
           <RightBar />
@@ -37,7 +45,7 @@ function App() {
     );
   };
 
-  const ProtectedRoute = ({ children }) => {
+  const ProtectedRoute = ({ children }: { children: ReactNode }) => {
     if (!currentUser) {
       return <Navigate to="/login" />;
     }
