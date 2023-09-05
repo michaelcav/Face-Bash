@@ -8,8 +8,7 @@ import authRoutes from './routes/auth';
 app.use(express.json)
 
 app.use('/api/auth', authRoutes)
-app.use('/api/users', userRoutes)
 
 app.listen(8800, ()=> {
-  console.log('conected dbd')
+  console.log('conected db')
 })
