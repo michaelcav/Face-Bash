@@ -1,17 +1,14 @@
 import express from 'express';
 import mysql from 'mysql';
 const app = express();
+import userRoutes from './routes/users';
+import authRoutes from './routes/auth';
 
-const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: '84744810',
-  database: 'test',
-})
+//middleware
+app.use(express.json)
 
-app.get('/', (req, res) => {
-  res.json('hello this is backend')
-})
+app.use('/api/auth', authRoutes)
+app.use('/api/users', userRoutes)
 
 app.listen(8800, ()=> {
   console.log('conected dbd')
