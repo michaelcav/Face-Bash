@@ -1,7 +1,6 @@
 // models/User.js
-
 import Sequelize from 'sequelize';
-import sequelize from '../sequelize.js'; // Importe a instância do Sequelize
+import sequelize from '../sequelize'; // Importe a instância do Sequelize
 
 const User = sequelize.define('User', {
    id: {

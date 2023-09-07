@@ -1,6 +1,9 @@
 // controllers/authController.js
 
-import User from '../models/User.js'; // Importe o modelo User
+import User from '../models/User.js'; //
+// User.sync({ alter: true }); 
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   try {
@@ -13,11 +16,21 @@ export const register = async (req, res) => {
       return res.status(409).json('User already exists!');
     }
 
+     // Verifique se o usuário já existe
+     const existingEmail = await User.findOne({
+      where: { email: req.body.email },
+    });
+
+    if (existingEmail) {
+      return res.status(409).json('Email already exists!');
+    }
+
+
     // Crie um novo usuário
     await User.create({
       username: req.body.username,
       email: req.body.email,
-      password: req.body.password,
+      hashedPassword,
       name: req.body.name,
     });
 
