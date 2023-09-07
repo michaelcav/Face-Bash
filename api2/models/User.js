@@ -1,5 +1,4 @@
 // models/User.js
-
 import Sequelize from 'sequelize';
 import sequelize from '../sequelize.js'; // Importe a instância do Sequelize
 

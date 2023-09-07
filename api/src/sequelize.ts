@@ -1,6 +1,6 @@
 // sequelize.js
 
-import Sequelize from 'sequelize';
+import {Sequelize} from 'sequelize';
 
 const sequelize = new Sequelize('social', 'root', 'root', {
   host: 'localhost',

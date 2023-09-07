@@ -5,6 +5,7 @@ import User from '../models/User'; //
 import bcrypt from "bcryptjs";
 import { Request, Response } from 'express';
 import jwt from "jsonwebtoken";
+import {RegisterUserType} from '../interfaces/registerUser'
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -26,13 +27,14 @@ export const register = async (req: Request, res: Response) => {
       return res.status(409).json('Email already exists!');
     }
 
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(req.body.password, salt);
+    const saltRounds = 10; // Número de salt rounds
+    const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
+
     // Crie um novo usuário
     await User.create({
       username: req.body.username,
       email: req.body.email,
-      hashedPassword,
+      password: hashedPassword,
       name: req.body.name,
     });
 
