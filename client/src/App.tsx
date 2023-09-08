@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ReactNode, useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/authContext";
@@ -15,7 +16,7 @@ import {
   Outlet,
   Navigate,
 } from "react-router-dom";
-
+import {User} from './interfaces/types'
 
 function App() {
   const authContext = useContext(AuthContext);

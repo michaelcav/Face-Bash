@@ -1,8 +1,23 @@
 import { db } from "../connect.js";
+import * as Yup from 'Yup'
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-export const register = (req, res) => {
+export const register = async (req, res) => {
+    const schema = Yup.object().shape({
+      username: Yup.string().required(),
+      email: Yup.string()
+        .email()
+        .required(),
+      password: Yup.string()
+        .required()
+        .min(4),
+        name: Yup.string().required()
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails' });
+    }
   //CHECK USER IF EXISTS
 
   const q = "SELECT * FROM users WHERE username = ?";

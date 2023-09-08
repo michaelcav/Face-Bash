@@ -32,7 +32,7 @@ const LeftBar = () => {
         <div className="menu">
           <div className="user">
             <img
-              src="https://avatars.githubusercontent.com/u/6902920?v=4"
+              src={currentUser?.profilePic}
               alt=""
             />
             <span>{currentUser?.name}</span>
