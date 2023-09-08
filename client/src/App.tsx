@@ -1,23 +1,20 @@
 import { ReactNode, useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/authContext";
-import Login from "./pages/login/Login";
-import Register from "./pages/register/Register";
+import Login from "./pages/Login/Login";
+import Register from "./pages/Register/Register";
+import Navbar from "./components/Navbar/Navbar";
+import LeftBar from "./components/Leftbar/LeftBar";
+import RightBar from "./components/Rightbar/RightBar";
+import Home from "./pages/Home/Home";
+import Profile from "./pages/Profile/Profile";
+import "./style.scss";
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
   Outlet,
   Navigate,
 } from "react-router-dom";
-import Navbar from "./components/navbar/Navbar";
-import LeftBar from "./components/leftBar/LeftBar";
-import RightBar from "./components/rightBar/RightBar";
-import Home from "./pages/home/Home";
-import Profile from "./pages/profile/Profile";
-import "./style.scss";
-// import auth from './context/auth'
-
 
 
 function App() {
