@@ -8,9 +8,6 @@ import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import { PostProps } from '../../constants/posts'
 import { Link } from "react-router-dom";
 import Comments from '../Comments/Comments';
-// import Comments from "../comments/Comments";
-// import { useState } from "react";
-
 
 export default function Post({ post }: PostProps) {
   const [commentOpen, setcommentOpen] = useState(false)

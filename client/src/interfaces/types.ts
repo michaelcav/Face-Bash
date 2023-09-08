@@ -2,6 +2,7 @@ export interface User {
   id: number;
   name: string;
   profilePic: string;
+  currentUser: string | null; 
 }
 
 export interface LoginInput {
