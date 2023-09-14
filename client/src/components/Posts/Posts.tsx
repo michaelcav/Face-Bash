@@ -1,20 +1,24 @@
-import React from 'react'
-import {PostType, posts} from '../../constants/posts'
-import Post from '../contentPosts/Post';
-import {useQuery} from '@tanstack/react-query'
-import { makeRequest } from '../../axios';
+import Post from "../contentPosts/Post";
+import "./posts.scss";
+import { useQuery } from "@tanstack/react-query";
+import { makeRequest } from "../../axios";
 
-export default function Posts() {
-  const {isLoading, error, data} = useQuery(['posts'], () => 
-   makeRequest.get('/posts').then((res) => {
-    return res.data
-   })
-  )
- console.log(data)
-  return <div className="posts">
-  {/* {data.map((post: PostType)=>(
-    <Post post={post} key={post.id}/>
-  ))} */}
-</div>;
-}
+const Posts = ({userId}) => {
+  const { isLoading, error, data } = useQuery(["posts"], () =>
+    makeRequest.get("/posts?userId="+userId).then((res) => {
+      return res.data;
+    })
+  );
 
+  return (
+    <div className="posts">
+      {error
+        ? "Something went wrong!"
+        : isLoading
+        ? "loading"
+        : data.map((post) => <Post post={post} key={post.id} />)}
+    </div>
+  );
+};
+
+export default Posts;
