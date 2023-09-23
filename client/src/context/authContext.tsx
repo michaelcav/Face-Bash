@@ -2,10 +2,8 @@ import axios from "axios";
 import { createContext, ReactNode, useEffect, useState } from "react";
 
 interface User {
-  // Defina aqui as propriedades do objeto de usuário, por exemplo:
   id: number;
   username: string;
-  // ...
 }
 
 interface AuthContextType {
@@ -38,7 +36,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
 
       setCurrentUser(res.data);
     } catch (error) {
-      // Trate erros de autenticação aqui
+      // erros de autenticação aqui
       console.error("Erro durante o login:", error);
     }
   };
