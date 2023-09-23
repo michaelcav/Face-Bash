@@ -1,29 +1,38 @@
-import { useContext, useState } from "react";
+import React, { useContext, useState, ChangeEvent, FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/authContext";
 import "./login.scss";
 
-const Login = () => {
-  const [inputs, setInputs] = useState({
+interface LoginState {
+  username: string;
+  password: string;
+}
+
+const Login: React.FC = () => {
+  const [inputs, setInputs] = useState<LoginState>({
     username: "",
     password: "",
   });
-  const [err, setErr] = useState(null);
+  const [err, setErr] = useState<string | null>(null);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
   const { login } = useContext(AuthContext);
 
-  const handleLogin = async (e) => {
+  const handleLogin = async (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
       await login(inputs);
-      navigate("/")
-    } catch (err) {
-      setErr(err.response.data);
+      navigate("/");
+    } catch (error) {
+      if (error.response && error.response.data) {
+        setErr(error.response.data);
+      } else {
+        setErr("An error occurred during login.");
+      }
     }
   };
 
@@ -49,15 +58,17 @@ const Login = () => {
               type="text"
               placeholder="Username"
               name="username"
+              value={inputs.username}
               onChange={handleChange}
             />
             <input
               type="password"
               placeholder="Password"
               name="password"
+              value={inputs.password}
               onChange={handleChange}
             />
-            {err && err}
+            {err && <div className="error">{err}</div>}
             <button onClick={handleLogin}>Login</button>
           </form>
         </div>
