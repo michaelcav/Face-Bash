@@ -4,12 +4,11 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-// import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import { PostProps } from '../../constants/posts'
+// import MoreHorizIcon from "@mui/icons-material/More
 import { Link } from "react-router-dom";
 import Comments from '../Comments/Comments';
 
-export default function Post({ post }: PostProps) {
+export default function Post({ post }) {
   const [commentOpen, setcommentOpen] = useState(false)
   const liked = true
   return (

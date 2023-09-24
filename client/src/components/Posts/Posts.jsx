@@ -1,5 +1,4 @@
 import React from 'react'
-import {PostType, posts} from '../../constants/posts'
 import Post from '../contentPosts/Post';
 import {useQuery} from '@tanstack/react-query'
 import { makeRequest } from '../../axios';

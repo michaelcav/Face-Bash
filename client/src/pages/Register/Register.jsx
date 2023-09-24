@@ -1,30 +1,30 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState,  } from 'react';
 import './register.scss';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {Inputs} from '../../interfaces/types'
+
 
 export default function Register() {
-  const initialInputs: Inputs = {
+  const initialInputs = {
     username: '',
     email: '',
     password: '',
     name: '',
   };
 
-  const [inputs, setInputs] = useState<Inputs>(initialInputs);
-  const [err, setErr] = useState<string | null>(null);
+  const [inputs, setInputs] = useState(initialInputs);
+  const [err, setErr] = useState(null);
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     const { name, value } = e.target;
     setInputs((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleClick = async (e: FormEvent<HTMLButtonElement>) => {
+  const handleClick = async (e) => {
     e.preventDefault();
 
     try {
-      await axios.post('http://localhost:8801/api/auth/register', inputs);
+      await axios.post('http://localhost:8800/api/auth/register', inputs);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         setErr(error.response?.data || 'An error occurred.');

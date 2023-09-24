@@ -1,16 +1,6 @@
-export interface Comment {
-  id: number;
-  desc: string;
-  name: string;
-  userId: number;
-  profilePicture: string;
-}
 
-export interface CommentProps {
-  comment: Comment;
-}
 
-export const comments: Comment[] = [
+export const comments = [
   {
     id: 1,
     desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam. Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam",

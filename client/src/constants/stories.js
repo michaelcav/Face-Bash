@@ -1,10 +1,6 @@
-export interface Story {
-  id: number;
-  name: string;
-  img: string;
-}
 
-export const stories: Story[] = [
+
+export const stories = [
   {
     id: 1,
     name: "John Doe",

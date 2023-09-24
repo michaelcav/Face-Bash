@@ -1,17 +1,6 @@
-export interface PostType {
-  id: number;
-  name: string;
-  userId: number;
-  profilePic: string;
-  desc: string;
-  img: string;
-}
 
-export interface PostProps {
-  post: PostType;
-}
 
-export const posts: PostType[] = [
+export const posts = [
   {
     id: 1,
     name: "John Doe",
