@@ -1,39 +1,43 @@
-import { DarkModeOutlined, EmailOutlined, GridViewOutlined, HomeOutlined, NotificationsOutlined, PersonOutline, SearchOutlined, WbSunnyOutlined } from '@mui/icons-material'
-import React, {useContext} from 'react'
-import { Link } from 'react-router-dom'
-import './navbar.scss'
+import "./navbar.scss";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
+import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
+import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
+import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import { Link } from "react-router-dom";
+import { useContext } from "react";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { AuthContext } from "../../context/authContext";
 
-
-export default function Navbar() {
+const Navbar = () => {
   const { toggle, darkMode } = useContext(DarkModeContext);
   const { currentUser } = useContext(AuthContext);
 
   return (
     <div className="navbar">
       <div className="left">
-        <Link to="/">
+        <Link to="/" style={{ textDecoration: "none" }}>
           <span>Face Bash</span>
         </Link>
-       <HomeOutlined className='icon' />
+        <HomeOutlinedIcon />
         {darkMode ? (
-        
-          <WbSunnyOutlined className='toggle' onClick={toggle} />
-         
+          <WbSunnyOutlinedIcon onClick={toggle} />
         ) : (
-          <DarkModeOutlined className='toggle' onClick={toggle} />
+          <DarkModeOutlinedIcon onClick={toggle} />
         )}
-        <GridViewOutlined />
+        <GridViewOutlinedIcon />
         <div className="search">
-          <SearchOutlined />
-          <input type="search" name="Search" placeholder='Search...' id="" />
+          <SearchOutlinedIcon />
+          <input type="text" placeholder="Search..." />
         </div>
       </div>
       <div className="right">
-        <PersonOutline />
-        <EmailOutlined />
-        <NotificationsOutlined />
+        <PersonOutlinedIcon />
+        <EmailOutlinedIcon />
+        <NotificationsOutlinedIcon />
         <div className="user">
           <img
             src={currentUser.profilePic}
@@ -43,5 +47,7 @@ export default function Navbar() {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default Navbar;

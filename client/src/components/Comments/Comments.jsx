@@ -1,35 +1,70 @@
-import React, { useContext } from 'react'
-import './comments.scss'
-import { comments } from '../../constants/comments'
-import { AuthContext } from '../../context/authContext';
-export default function Comments() {
-  const auth = useContext(AuthContext);
- 
-  if(!auth) {
-    return null
-  }
+import { useContext, useState } from "react";
+import "./comments.scss";
+import { AuthContext } from "../../context/authContext";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { makeRequest } from "../../axios";
+import moment from "moment";
 
-  const { currentUser } = auth;
+const Comments = ({ postId }) => {
+  const [desc, setDesc] = useState("");
+  const { currentUser } = useContext(AuthContext);
+
+  const { isLoading, error, data } = useQuery(["comments"], () =>
+    makeRequest.get("/comments?postId=" + postId).then((res) => {
+      return res.data;
+    })
+  );
+
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (newComment) => {
+      return makeRequest.post("/comments", newComment);
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(["comments"]);
+      },
+    }
+  );
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    mutation.mutate({ desc, postId });
+    setDesc("");
+  };
 
   return (
-    <div className='comments' style={{ backgroundColor: "#5555", borderRadius: "10px" }}>
+    <div className="comments">
       <div className="write">
-        <img src={currentUser?.profilePic} alt="" />
-        <input type="text" placeholder='escreva seu comentário' />
-        <button>Enviar</button>
+        <img src={"/upload/" + currentUser.profilePic} alt="" />
+        <input
+          type="text"
+          placeholder="write a comment"
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+        />
+        <button onClick={handleClick}>Send</button>
       </div>
-      {comments.map((comment) => (
-        <div className="comment" style={{ padding: "10px" }}>
-          <img src={comment.profilePicture} alt="" />
-          <div className="info">
-            <span>{comment.name}</span>
-            <p>{comment.desc}</p>
-          </div>
-          <span className="date">
-            faz 1 hora
-          </span>
-        </div>
-      ))}
+      {error
+        ? "Something went wrong"
+        : isLoading
+        ? "loading"
+        : data.map((comment) => (
+            <div className="comment">
+              <img src={"/upload/" + comment.profilePic} alt="" />
+              <div className="info">
+                <span>{comment.name}</span>
+                <p>{comment.desc}</p>
+              </div>
+              <span className="date">
+                {moment(comment.createdAt).fromNow()}
+              </span>
+            </div>
+          ))}
     </div>
-  )
-}
+  );
+};
+
+export default Comments;
