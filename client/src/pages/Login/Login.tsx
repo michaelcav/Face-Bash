@@ -6,9 +6,12 @@ import "./login.scss";
 interface LoginState {
   username: string;
   password: string;
+
 }
 
 const Login: React.FC = () => {
+
+
   const [inputs, setInputs] = useState<LoginState>({
     username: "",
     password: "",
@@ -20,13 +23,19 @@ const Login: React.FC = () => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
-  const { login } = useContext(AuthContext);
+  
+  const login = useContext(AuthContext)?.login;
 
   const handleLogin = async (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
     try {
-      await login(inputs);
-      navigate("/");
+      if (login) { // Verifica se login está definido
+        await login(inputs);
+        navigate("/");
+      } else {
+        // Lida com o caso em que login é undefined
+        throw new Error("Login function is undefined");
+      }
     } catch (error) {
       if (error.response && error.response.data) {
         setErr(error.response.data);

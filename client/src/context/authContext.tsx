@@ -27,7 +27,7 @@ export const AuthContextProvider: React.FC<AuthContextProviderProps> = ({
   const login = async (inputs: Record<string, string>) => {
     try {
       const res = await axios.post<User>(
-        "http://localhost:8800/api/auth/login",
+        "http://localhost:8801/api/auth/login",
         inputs,
         {
           withCredentials: true,

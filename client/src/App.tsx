@@ -1,5 +1,4 @@
-import Login from "./pages/login/Login";
-import Register from "./pages/register/Register";
+import React, { useContext } from "react";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -11,17 +10,16 @@ import LeftBar from "./components/leftBar/LeftBar";
 import RightBar from "./components/rightBar/RightBar";
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
+import Login from "./pages/login/Login";
+import Register from "./pages/register/Register";
 import "./style.scss";
-import { useContext } from "react";
 import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/authContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function App() {
-  const { currentUser } = useContext(AuthContext);
-
-  const { darkMode } = useContext(DarkModeContext);
-
+  const currentUser = useContext(AuthContext)?.currentUser;
+  const darkMode = useContext(DarkModeContext);
   const queryClient = new QueryClient();
 
   const Layout = () => {
