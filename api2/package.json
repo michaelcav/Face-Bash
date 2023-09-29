@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "type": "module",
+
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
@@ -25,7 +26,6 @@
     "yup": "^1.2.0"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1",
-    "ts-node": "^10.9.1"
+    
   }
 }
