@@ -12,7 +12,6 @@ import moment from 'moment'
 const Post = ({ post }) => {
   const [commentOpen, setCommentOpen] = useState(false);
 
-  //TEMPORARY
   const liked = false;
 
   return (
