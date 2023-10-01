@@ -25,7 +25,39 @@ const Post = ({ post }) => {
     })
   );
 
-  console.log(data);
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation(
+    (liked) => {
+      if (liked) return makeRequest.delete("/likes?postId=" + post.id);
+      return makeRequest.post("/likes", { postId: post.id });
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(["likes"]);
+      },
+    }
+  );
+  const deleteMutation = useMutation(
+    (postId) => {
+      return makeRequest.delete("/posts/" + postId);
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(["posts"]);
+      },
+    }
+  );
+
+  const handleLike = () => {
+    mutation.mutate(data.includes(currentUser.id));
+  };
+
+  const handleDelete = () => {
+    deleteMutation.mutate(post.id);
+  };
 
   return (
     <div className="post">
@@ -50,19 +82,18 @@ const Post = ({ post }) => {
           <img src={"./upload/" + post.img} alt="" />
         </div>
         <div className="info">
-          <div className="item">
+        <div className="item">
             {isLoading ? (
-              "Loading"
+              "loading"
+            ) : data.includes(currentUser.id) ? (
+              <FavoriteOutlinedIcon
+                style={{ color: "red" }}
+                onClick={handleLike}
+              />
             ) : (
-              <>
-                {data?.includes(currentUser.id) ? (
-                  <FavoriteOutlinedIcon style={{ color: "red" }} />
-                ) : (
-                  <FavoriteBorderOutlinedIcon />
-                )}
-                {data?.length} Likes
-              </>
+              <FavoriteBorderOutlinedIcon onClick={handleLike} />
             )}
+            {data?.length} Likes
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />
