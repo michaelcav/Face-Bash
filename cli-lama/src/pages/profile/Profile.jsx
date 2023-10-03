@@ -14,7 +14,7 @@ import { makeRequest } from "../../axios";
 import { useLocation } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../context/authContext";
-// import Update from "../../components/update/Update";
+import Update from "../../components/update/Update";
 import { useState } from "react";
 
 const Profile = () => {
@@ -40,7 +40,6 @@ const Profile = () => {
       })
   );
   
-  console.log(relationshipData)
 
   const queryClient = useQueryClient();
 
@@ -124,7 +123,7 @@ const Profile = () => {
           </div>
         </>
       )}
-      {/* {openUpdate && <Update setOpenUpdate={setOpenUpdate} user={data} />} */}
+      {openUpdate && <Update setOpenUpdate={setOpenUpdate} user={data} />}
     </div>
   );
 };
