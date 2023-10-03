@@ -11,15 +11,21 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Posts from "../../components/post/Post"
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
+import { useContext } from "react";
+import { AuthContext } from "../../context/authContext";
+import { useLocation } from "react-router-dom";
 
 const Profile = () => {
 
-//   const { isLoading, error, data } = useQuery(["likes", post.id], () =>
-//   makeRequest.get("/likes?postId=" + post.id).then((res) => {
-//     return res.data;
-//   })
-// );
+  const userId = useLocation().pathname.split("/")[2]
 
+  const { isLoading, error, data } = useQuery(["user"], () =>
+  makeRequest.get("/users/find/" + userId).then((res) => {
+    return res.data;
+  })
+);
+
+console.log(data);
 
   return (
     <div className="profile">
