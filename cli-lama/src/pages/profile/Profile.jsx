@@ -29,9 +29,8 @@ const Profile = () => {
     })
   );
 
-  const {bio, profilePic, coverPic, } = data
+  const user = data;
 
-   console.log(bio, profilePic, coverPic)
 
   const { isLoading: rIsLoading, data: relationshipData } = useQuery(
     ["relationship"],
@@ -68,8 +67,8 @@ const Profile = () => {
       ) : (
         <>
           <div className="images">
-            <img src={data.coverPic} alt="" className="cover" />
-            <img src={data.profilePic} alt="" className="profilePic" />
+            <img src={user.coverPic} alt="" className="cover" />
+            <img src={user.profilePic} alt="" className="profilePic" />
           </div>
           <div className="profileContainer">
             <div className="uInfo">
@@ -91,15 +90,15 @@ const Profile = () => {
                 </a>
               </div>
               <div className="center">
-                <span>{data.name}</span>
+                <span>{user.name}</span>
                 <div className="info">
                   <div className="item">
                     <PlaceIcon />
-                    <span>{data.city}</span>
+                    <span>{user.city}</span>
                   </div>
                   <div className="item">
                     <LanguageIcon />
-                    <span>{data.website}</span>
+                    <span>{user.website}</span>
                   </div>
                 </div>
                 {rIsLoading ? (
