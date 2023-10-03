@@ -16,22 +16,15 @@ import { AuthContext } from "../../context/authContext";
 import { useLocation } from "react-router-dom";
 
 const Profile = () => {
-  const userId = useLocation().pathname.split("/")[16];
+  const userId = useLocation().pathname.split("/")[2];
   const { isLoading, error, data } = useQuery(["user"], () =>
-    makeRequest.get("/users/find/" + userId).then((res) => {
+    makeRequest.get("/users/find/"+userId).then((res) => {
       return res.data;
     })
   );
 
   console.log(data);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error || !data) {
-    return <div>Error loading user data.</div>;
-  }
 
   return (
     <div className="profile">
