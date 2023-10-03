@@ -3,8 +3,8 @@ import jwt from "jsonwebtoken";
 
 export const getUser = (req, res) => {
   console.log("profile")
-  const userId = req.params.userId;
-  const q = "SELECT * FROM users WHERE id=?";
+ const userId = req.params.userId;
+const q = "SELECT * FROM users WHERE id=?";
 
   db.query(q, [userId], (err, data) => {
     if (err) return res.status(500).json(err);
