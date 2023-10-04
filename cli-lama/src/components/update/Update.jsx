@@ -17,7 +17,7 @@ const Update = ({ setOpenUpdate, user }) => {
 
   const queryClient = useQueryClient();
 
-  const uploadCover = async (file) => {
+  const upload = async (file) => {
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -28,50 +28,18 @@ const Update = ({ setOpenUpdate, user }) => {
     }
   };
 
-  const uploadProfile = async (file) => {
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
-      const res = await makeRequest.post("/upload", formData);
-      return res.data;
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  useEffect(() => {
-    // Crie novos objetos URL quando as imagens forem alteradas
-    if (cover) {
-      setCoverUrl(URL.createObjectURL(cover));
-    }
-    if (profile) {
-      setProfileUrl(URL.createObjectURL(profile));
-    }
-  }, [cover, profile]);
-
-  const [coverUrl, setCoverUrl] = useState(
-    cover ? URL.createObjectURL(cover) : `/upload/${user.coverPic}`
-  );
-  const [profileUrl, setProfileUrl] = useState(
-    profile ? URL.createObjectURL(profile) : `/upload/${user.profilePic}`
-  );
-
-  const handleChange = (e) => {
-    setTexts((prevTexts) => ({
-      ...prevTexts,
-      [e.target.name]: e.target.value,
-    }));
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const coverUrl = cover ? await uploadCover(cover) : user.coverPic;
-    const profileUrl = profile ? await uploadProfile(profile) : user.profilePic;
+    const coverUrl = cover ? await upload(cover) : user.coverPic;
+    const profileUrl = profile ? await upload(profile) : user.profilePic;
 
     if (cover || profile) {
       const updatedUser = { ...texts, coverPic: coverUrl, profilePic: profileUrl };
       mutation.mutate(updatedUser);
+
+      console.log(coverUrl)
     }
 
     setOpenUpdate(false);
@@ -89,6 +57,9 @@ const Update = ({ setOpenUpdate, user }) => {
       },
     }
   );
+  const handleChange = (e) => {
+    setTexts((prev) => ({ ...prev, [e.target.name]: [e.target.value] }));
+  };
 
   return (
     <div className="update">
@@ -97,9 +68,16 @@ const Update = ({ setOpenUpdate, user }) => {
         <form>
           <div className="files">
             <label htmlFor="cover">
-              <span>Cover Picture</span>
+              <span>Profile Picture</span>
               <div className="imgContainer">
-                <img src={coverUrl} alt="" />
+              <img
+                  src={
+                    cover
+                      ? URL.createObjectURL(cover)
+                      : "/upload/" + user.coverPic
+                  }
+                  alt=""
+                />
                 <CloudUploadIcon className="icon" />
               </div>
             </label>
@@ -110,9 +88,16 @@ const Update = ({ setOpenUpdate, user }) => {
               onChange={(e) => setCover(e.target.files[0])}
             />
             <label htmlFor="profile">
-              <span>Profile Picture</span>
+              <span>Cover Picture</span>
               <div className="imgContainer">
-                <img src={profileUrl} alt="" />
+              <img
+                  src={
+                    profile
+                      ? URL.createObjectURL(profile)
+                      : "/upload/" + user.profilePic
+                  }
+                  alt=""
+                />
                 <CloudUploadIcon className="icon" />
               </div>
             </label>
