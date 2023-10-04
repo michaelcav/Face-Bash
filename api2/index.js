@@ -25,7 +25,7 @@ app.use(cookieParser());
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "../cli-lama/public/upload");
+    cb(null, "../../../youtube2022-social-app/youtube2022-social-app/client/public/upload/");
   },
   filename: function (req, file, cb) {
     cb(null, Date.now() + file.originalname);
