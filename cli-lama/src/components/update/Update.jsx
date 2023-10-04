@@ -1,22 +1,22 @@
-import './update.scss'
-import React, {useState, useContext} from 'react';
-import { AuthContext } from "../../context/authContext";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { makeRequest } from "../../axios";
+import "./update.scss";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
-export default function Update({setOpenUpdate, user}) {
-const [cover, setCover] = useState(null);
-const [profile, setProfile] = useState(null);
+const Update = ({ setOpenUpdate, user }) => {
+  const [cover, setCover] = useState(null);
+  const [profile, setProfile] = useState(null);
   const [texts, setTexts] = useState({
     email: user.email,
     password: user.password,
     name: user.name,
     city: user.city,
     website: user.website,
-  })
+  });
 
   const upload = async (file) => {
+    console.log(file)
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -27,6 +27,7 @@ const [profile, setProfile] = useState(null);
     }
   };
 
+ 
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
@@ -59,6 +60,7 @@ const [profile, setProfile] = useState(null);
   const handleChange = (e) => {
    setTexts((prev) => ({...prev, [e.target.name]: [e.target.value]}))
   }
+
 
   return (
     <div className="update">
@@ -150,4 +152,6 @@ const [profile, setProfile] = useState(null);
       </div>
     </div>
   );
-}
+};
+
+export default Update;
