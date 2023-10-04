@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { makeRequest } from "../../axios";
 import "./update.scss";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -15,20 +15,69 @@ const Update = ({ setOpenUpdate, user }) => {
     website: user.website,
   });
 
-  const upload = async (file) => {
-    console.log(file)
+  const queryClient = useQueryClient();
+
+  const uploadCover = async (file) => {
     try {
       const formData = new FormData();
       formData.append("file", file);
       const res = await makeRequest.post("/upload", formData);
       return res.data;
     } catch (err) {
-      console.log(err);
+      console.error(err);
     }
   };
 
- 
-  const queryClient = useQueryClient();
+  const uploadProfile = async (file) => {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const res = await makeRequest.post("/upload", formData);
+      return res.data;
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    // Crie novos objetos URL quando as imagens forem alteradas
+    if (cover) {
+      setCoverUrl(URL.createObjectURL(cover));
+    }
+    if (profile) {
+      setProfileUrl(URL.createObjectURL(profile));
+    }
+  }, [cover, profile]);
+
+  const [coverUrl, setCoverUrl] = useState(
+    cover ? URL.createObjectURL(cover) : `/upload/${user.coverPic}`
+  );
+  const [profileUrl, setProfileUrl] = useState(
+    profile ? URL.createObjectURL(profile) : `/upload/${user.profilePic}`
+  );
+
+  const handleChange = (e) => {
+    setTexts((prevTexts) => ({
+      ...prevTexts,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const coverUrl = cover ? await uploadCover(cover) : user.coverPic;
+    const profileUrl = profile ? await uploadProfile(profile) : user.profilePic;
+
+    if (cover || profile) {
+      const updatedUser = { ...texts, coverPic: coverUrl, profilePic: profileUrl };
+      mutation.mutate(updatedUser);
+    }
+
+    setOpenUpdate(false);
+    setCover(null);
+    setProfile(null);
+  };
 
   const mutation = useMutation(
     (user) => {
@@ -36,31 +85,10 @@ const Update = ({ setOpenUpdate, user }) => {
     },
     {
       onSuccess: () => {
-        // Invalidate and refetch
         queryClient.invalidateQueries(["user"]);
       },
     }
   );
-
-  const handleClick = async (e) => {
-    e.preventDefault();
-
-    //TODO: find a better way to get image URL
-    
-    let coverUrl;
-    let profileUrl;
-    coverUrl = cover ? await upload(cover) : user.coverPic;
-    profileUrl = profile ? await upload(profile) : user.profilePic;
-    
-    mutation.mutate({ ...texts, coverPic: coverUrl, profilePic: profileUrl });
-    setOpenUpdate(false);
-    setCover(null);
-    setProfile(null);}
-
-  const handleChange = (e) => {
-   setTexts((prev) => ({...prev, [e.target.name]: [e.target.value]}))
-  }
-
 
   return (
     <div className="update">
@@ -71,14 +99,7 @@ const Update = ({ setOpenUpdate, user }) => {
             <label htmlFor="cover">
               <span>Cover Picture</span>
               <div className="imgContainer">
-                <img
-                  src={
-                    cover
-                      ? URL.createObjectURL(cover)
-                      : "/upload/" + user.coverPic
-                  }
-                  alt=""
-                />
+                <img src={coverUrl} alt="" />
                 <CloudUploadIcon className="icon" />
               </div>
             </label>
@@ -91,14 +112,7 @@ const Update = ({ setOpenUpdate, user }) => {
             <label htmlFor="profile">
               <span>Profile Picture</span>
               <div className="imgContainer">
-                <img
-                  src={
-                    profile
-                      ? URL.createObjectURL(profile)
-                      : "/upload/" + user.profilePic
-                  }
-                  alt=""
-                />
+                <img src={profileUrl} alt="" />
                 <CloudUploadIcon className="icon" />
               </div>
             </label>
@@ -144,7 +158,7 @@ const Update = ({ setOpenUpdate, user }) => {
             value={texts.website}
             onChange={handleChange}
           />
-          <button onClick={handleClick}>Update</button>
+          <button onClick={handleSubmit}>Update</button>
         </form>
         <button className="close" onClick={() => setOpenUpdate(false)}>
           close
