@@ -1,67 +1,96 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import "./comments.scss";
 import { AuthContext } from "../../context/authContext";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import moment from 'moment';
-
+import moment from "moment";
 
 const Comments = ({ postId }) => {
-   
-  // const [file, setFile] = useState(null);
-const [desc, setDesc] = useState("");
+  const [desc, setDesc] = useState("");
+  const { currentUser } = useContext(AuthContext);
+  const queryClient = useQueryClient();
 
-const queryClient = useQueryClient();
+  // Use useEffect para fazer a consulta somente quando o postId for definido
+  useEffect(() => {
+    if (postId) {
+      queryClient.invalidateQueries(["comments", postId]);
+    }
+  }, [postId, queryClient]);
 
-const mutation = useMutation(
-  (newComment) => {
-    return makeRequest.post("/comments", newComment);
-  },
-  {
-    onSuccess: () => {
-      // Invalidate and refetch
-      queryClient.invalidateQueries(["comments"]);
-    },
-  }
-);
-
- const handleClick = async (e) => {
-  e.preventDefault();
-  
-  mutation.mutate({ desc, postId });
-  setDesc("");
-};
-
-  const { isLoading, error, data } = useQuery(["comments"], () =>
-    makeRequest.get("/comments?postId=" + postId).then((res) => {
+  const { isLoading, error, data } = useQuery(["comments", postId], () =>
+    makeRequest.get(`/comments?postId=${postId}`).then((res) => {
       return res.data;
     })
   );
+  console.log("comments"+data)
 
-  const { currentUser } = useContext(AuthContext);
+  const mutation = useMutation(
+    (newComment) => {
+      return makeRequest.post("/comments", newComment);
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(["comments", postId]);
+      },
+    }
+  );
+
+  const deleteMutation = useMutation(
+    (commentId) => {
+      return makeRequest.delete(`/comments/${commentId}`);
+    },
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(["comments", postId]);
+      },
+    }
+  );
+
+  const handleDelete = (commentId) => {
+    deleteMutation.mutate(commentId);
+  };
+
+  const handleClick = async (e) => {
+    e.preventDefault();
+    mutation.mutate({ desc, postId });
+    setDesc("");
+  };
 
   return (
     <div className="comments">
       <div className="write">
-        <img src={"/upload/"+currentUser.profilePic} alt="" />
-        <input type="text" placeholder="write a comment"
-        value={desc}
-         onChange={(e) => setDesc(e.target.value)}/>
+        <img src={`/upload/${currentUser.profilePic}`} alt="" />
+        <input
+          type="text"
+          placeholder="write a comment"
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+        />
         <button onClick={handleClick}>Send</button>
       </div>
-      {isLoading ?
-       "loading"
-        : data.map((comment) => (
-          <div className="comment">
-            <img src={"/upload/"+currentUser.profilePic}  alt="" />
+      {error ? (
+        "Something went wrong"
+      ) : isLoading ? (
+        "loading"
+      ) : (
+        data.map((comment) => (
+          <div className="comment" key={comment.id}>
+            <img src={`/upload/${comment.profilePic}`} alt="" />
             <div className="info">
               <span>{comment.name}</span>
               <p>{comment.desc}</p>
             </div>
-            <span className="date">{moment(comment.createdAt).fromNow()}</span>
+            <span className="date">
+              {moment(comment.createdAt).fromNow()}
+            </span>
+            {currentUser.id === comment.userId && (
+              <button onClick={() => handleDelete(comment.id)}>delete</button>
+            )}
           </div>
-        ))}
+        ))
+      )}
     </div>
   );
 };

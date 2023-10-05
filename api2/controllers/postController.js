@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import moment from "moment";
 
 export const getPosts = (req, res) => {
+  console.log("post")
   const userId = req.query.userId;
   const token = req.cookies.accessToken;
   if (!token) return res.status(401).json("Not logged in!");
@@ -50,21 +51,64 @@ export const addPost = (req, res) => {
     });
   });
 };
+
 export const deletePost = (req, res) => {
-  console.log("delete")
   const token = req.cookies.accessToken;
   if (!token) return res.status(401).json("Not logged in!");
 
   jwt.verify(token, "secretkey", (err, userInfo) => {
     if (err) return res.status(403).json("Token is not valid!");
 
-    const q =
-      "DELETE FROM posts WHERE `id`=? AND `userId` = ?";
+    const postId = req.params.id;
 
-    db.query(q, [req.params.id, userInfo.id], (err, data) => {
+    // Iniciar uma transação para garantir a consistência
+    db.beginTransaction((err) => {
       if (err) return res.status(500).json(err);
-      if(data.affectedRows>0) return res.status(200).json("Post has been deleted.");
-      return res.status(403).json("You can delete only your post")
+
+      // Consultar os comentários relacionados à postagem
+      const selectCommentsQuery = "SELECT id FROM comments WHERE postId = ?";
+      db.query(selectCommentsQuery, [postId], (err, commentIds) => {
+        if (err) {
+          db.rollback(() => {
+            return res.status(500).json(err);
+          });
+        }
+
+        // Excluir os comentários relacionados à postagem
+        const deleteCommentsQuery = "DELETE FROM comments WHERE postId = ?";
+        db.query(deleteCommentsQuery, [postId], (err) => {
+          if (err) {
+            db.rollback(() => {
+              return res.status(500).json(err);
+            });
+          }
+
+          // Excluir a postagem
+          const deletePostQuery = "DELETE FROM posts WHERE id = ? AND userId = ?";
+          db.query(deletePostQuery, [postId, userInfo.id], (err, data) => {
+            if (err) {
+              db.rollback(() => {
+                return res.status(500).json(err);
+              });
+            }
+
+            // Commit da transação
+            db.commit((err) => {
+              if (err) {
+                db.rollback(() => {
+                  return res.status(500).json(err);
+                });
+              }
+
+              if (data.affectedRows > 0) {
+                return res.status(200).json("Post has been deleted.");
+              } else {
+                return res.status(403).json("You can delete only your post.");
+              }
+            });
+          });
+        });
+      });
     });
   });
 };
