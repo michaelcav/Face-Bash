@@ -26,25 +26,37 @@ export const register = async (req, res) => {
       return res.status(409).json("User already exists!");
     }
 
-    // Cria um novo usuário
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(req.body.password, salt);
-
-    const insertUserQuery =
-      "INSERT INTO users (username, email, password, name) VALUES (?, ?, ?, ?)";
-    const values = [
-      req.body.username,
-      req.body.email,
-      hashedPassword,
-      req.body.name,
-    ];
-
-    db.query(insertUserQuery, values, (err, data) => {
+    // Verifica se o email já existe
+    const checkEmailQuery = "SELECT * FROM users WHERE email = ?";
+    db.query(checkEmailQuery, [req.body.email], (err, emailData) => {
       if (err) {
         return res.status(500).json(err);
       }
 
-      return res.status(200).json("User has been created.");
+      if (emailData.length) {
+        return res.status(409).json("Email already exists!");
+      }
+
+      // Cria um novo usuário
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(req.body.password, salt);
+
+      const insertUserQuery =
+        "INSERT INTO users (username, email, password, name) VALUES (?, ?, ?, ?)";
+      const values = [
+        req.body.username,
+        req.body.email,
+        hashedPassword,
+        req.body.name,
+      ];
+
+      db.query(insertUserQuery, values, (err, data) => {
+        if (err) {
+          return res.status(500).json(err);
+        }
+
+        return res.status(200).json("User has been created.");
+      });
     });
   });
 };
@@ -58,7 +70,7 @@ export const login = (req, res) => {
     }
 
     if (userData.length === 0) {
-      return res.status(404).json("User not found!");
+      return res.status(404).json("Wrong password or username!");
     }
 
     const checkPassword = bcrypt.compareSync(

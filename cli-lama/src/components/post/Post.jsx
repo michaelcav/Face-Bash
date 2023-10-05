@@ -60,6 +60,7 @@ const Post = ({ post }) => {
     deleteMutation.mutate(post.id);
   };
 
+
   return (
     <div className="post">
     <div className="container">
