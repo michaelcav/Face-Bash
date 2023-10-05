@@ -51,6 +51,7 @@ export const addPost = (req, res) => {
   });
 };
 export const deletePost = (req, res) => {
+  console.log("delete")
   const token = req.cookies.accessToken;
   if (!token) return res.status(401).json("Not logged in!");
 

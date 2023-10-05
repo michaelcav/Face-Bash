@@ -1,38 +1,37 @@
 import { db } from "../connect.js";
-import * as Yup from 'Yup'
+import * as Yup from "yup";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
-    const schema = Yup.object().shape({
-      username: Yup.string().required(),
-      email: Yup.string()
-        .email()
-        .required(),
-      password: Yup.string()
-        .required()
-        .min(4),
-        name: Yup.string().required()
-    });
+  const schema = Yup.object().shape({
+    username: Yup.string().required(),
+    email: Yup.string().email().required(),
+    password: Yup.string().required().min(4),
+    name: Yup.string().required(),
+  });
 
-    if (!(await schema.isValid(req.body))) {
-      return res.status(400).json({ error: 'Validation fails' });
+  if (!(await schema.isValid(req.body))) {
+    return res.status(400).json({ error: "Validation fails" });
+  }
+
+  // Verifica se o usuário já existe
+  const checkUserQuery = "SELECT * FROM users WHERE username = ?";
+  db.query(checkUserQuery, [req.body.username], (err, userData) => {
+    if (err) {
+      return res.status(500).json(err);
     }
-  //CHECK USER IF EXISTS
 
-  const q = "SELECT * FROM users WHERE username = ?";
+    if (userData.length) {
+      return res.status(409).json("User already exists!");
+    }
 
-  db.query(q, [req.body.username], (err, data) => {
-    if (err) return res.status(500).json(err);
-    if (data.length) return res.status(409).json("User already exists!");
-    //CREATE A NEW USER
-    //Hash the password
+    // Cria um novo usuário
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(req.body.password, salt);
 
-    const q =
-      "INSERT INTO users (`username`,`email`,`password`,`name`) VALUE (?)";
-
+    const insertUserQuery =
+      "INSERT INTO users (username, email, password, name) VALUES (?, ?, ?, ?)";
     const values = [
       req.body.username,
       req.body.email,
@@ -40,31 +39,40 @@ export const register = async (req, res) => {
       req.body.name,
     ];
 
-    db.query(q, [values], (err, data) => {
-      if (err) return res.status(500).json(err);
+    db.query(insertUserQuery, values, (err, data) => {
+      if (err) {
+        return res.status(500).json(err);
+      }
+
       return res.status(200).json("User has been created.");
     });
   });
 };
 
 export const login = (req, res) => {
-  const q = "SELECT * FROM users WHERE username = ?";
+  console.log("login")
+  const checkUserQuery = "SELECT * FROM users WHERE username = ?";
+  db.query(checkUserQuery, [req.body.username], (err, userData) => {
+    if (err) {
+      return res.status(500).json(err);
+    }
 
-  db.query(q, [req.body.username], (err, data) => {
-    if (err) return res.status(500).json(err);
-    if (data.length === 0) return res.status(404).json("User not found!");
+    if (userData.length === 0) {
+      return res.status(404).json("User not found!");
+    }
 
     const checkPassword = bcrypt.compareSync(
       req.body.password,
-      data[0].password
+      userData[0].password
     );
 
-    if (!checkPassword)
+    if (!checkPassword) {
       return res.status(400).json("Wrong password or username!");
+    }
 
-    const token = jwt.sign({ id: data[0].id }, "secretkey");
+    const token = jwt.sign({ id: userData[0].id }, "secretkey");
 
-    const { password, ...others } = data[0];
+    const { password, ...others } = userData[0];
 
     res
       .cookie("accessToken", token, {
@@ -76,8 +84,8 @@ export const login = (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("accessToken",{
-    secure:true,
-    sameSite:"none"
-  }).status(200).json("User has been logged out.")
+  res.clearCookie("accessToken", {
+    secure: true,
+    sameSite: "none",
+  }).status(200).json("User has been logged out.");
 };

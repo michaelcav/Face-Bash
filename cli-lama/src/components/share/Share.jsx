@@ -40,7 +40,16 @@ const Share = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     let imgUrl = "";
-    if (file) imgUrl = await upload();
+  
+    // Verifique se ambos 'desc' e 'file' estão vazios
+    if (!desc.trim() && !file) {
+      return; // Não faz nada se ambos estiverem vazios
+    }
+  
+    if (file) {
+      imgUrl = await upload();
+    }
+  
     mutation.mutate({ desc, img: imgUrl });
     setDesc("");
     setFile(null);
