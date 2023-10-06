@@ -2,6 +2,9 @@
     Face Bash
   </span>
 
+<h3 align="center">
+  Foi desenvolvido uma social midia com o back end sendo feito em NodeJS com Mysql e front com React e Sass
+</h3>
 
   <p align="center">
     <img src="https://i.imgur.com/bV7p39v.png" width="50%" height="50%" max-width:100% >
@@ -14,10 +17,6 @@
   <p align="center">
     <img src="https://i.imgur.com/COjL6WU.png" width="50%" height="50%" max-width:100% >
   </p>
-
-<h3 align="center">
-  Foi desenvolvido uma social midia com o back end sendo feito em NodeJS com Mysql e front com React e Sass
-</h3>
 
 <p align="center">
   <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/belapferreira/go-restaurant-web">
