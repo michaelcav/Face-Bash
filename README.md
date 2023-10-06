@@ -1,6 +1,6 @@
-<span align="center">
+<p align="center">
     Face Bash
-  </span>
+  </p>
 
 <h3 align="center">
   Foi desenvolvido uma social midia com o back end sendo feito em NodeJS com Mysql e front com React e Sass
