@@ -1,6 +1,6 @@
-<p align="center">
+<span align="center">
     Face Bash
-  </p>
+  </span>
 
 
   <p align="center">
