@@ -22,12 +22,14 @@ const Navbar = () => {
         <Link to="/" style={{ textDecoration: "none" }}>
           <span>Face Bash</span>
         </Link>
-        <HomeOutlinedIcon />
+      
+       <HomeOutlinedIcon />
         {darkMode ? (
-          <WbSunnyOutlinedIcon onClick={toggle} />
+           <Link style={{textDecoration: "none", color:"inherit"}}><WbSunnyOutlinedIcon onClick={toggle} /> </Link>
         ) : (
-          <DarkModeOutlinedIcon onClick={toggle} />
+          <Link style={{textDecoration: "none", color:"inherit"}}><DarkModeOutlinedIcon onClick={toggle} /> </Link>
         )}
+      
         <div className="search">
           <SearchOutlinedIcon />
           <input type="text" placeholder="Search..." />
@@ -36,11 +38,15 @@ const Navbar = () => {
       <div className="right">
         <NotificationsOutlinedIcon />
         <div className="user">
-          <img
-            src={"/upload/"+currentUser.profilePic}
-            alt=""
-          />
-          <span>{currentUser.name}</span>
+        <Link 
+             to={`/profile/${currentUser.id}`}
+             style={{textDecoration: "none", display: "flex", alignItems:"center" ,color:"inherit"}}>
+              <img
+              src={`/upload/${currentUser.profilePic}`}
+              alt=""
+            />
+            <span style={{ marginLeft: "15px"}}>{currentUser.name}</span>
+            </Link>
         </div>
       </div>
     </div>
