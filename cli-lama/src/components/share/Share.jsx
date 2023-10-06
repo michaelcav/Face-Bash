@@ -27,8 +27,10 @@ const Share = () => {
 
   const mutation = useMutation(
     (newPost) => {
-      return makeRequest.post("/posts", newPost);
+      return makeRequest.post("/posts", console.log(newPost));  
+      
     },
+   
     {
       onSuccess: () => {
         // Invalidate and refetch
@@ -40,16 +42,7 @@ const Share = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     let imgUrl = "";
-  
-    // Verifique se ambos 'desc' e 'file' estão vazios
-    if (!desc.trim() && !file) {
-      return; // Não faz nada se ambos estiverem vazios
-    }
-  
-    if (file) {
-      imgUrl = await upload();
-    }
-  
+    if (file) imgUrl = await upload();
     mutation.mutate({ desc, img: imgUrl });
     setDesc("");
     setFile(null);
@@ -60,7 +53,7 @@ const Share = () => {
       <div className="container">
         <div className="top">
           <div className="left">
-            <img src={`/upload/${currentUser.profilePic}`} alt="" />
+            <img src={"/upload/" + currentUser.profilePic} alt="" />
             <input
               type="text"
               placeholder={`What's on your mind ${currentUser.name}?`}

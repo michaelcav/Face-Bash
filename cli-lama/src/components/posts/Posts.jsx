@@ -10,13 +10,19 @@ const Posts = ({userId}) => {
     })
   );
 
+
+
+  console.log("PostList")
+  console.log(data)
+  console.log("PostList")
+
   return (
     <div className="posts">
       {error
         ? "Something went wrong!"
         : isLoading
         ? "loading"
-        : data.map((post) => <Post post={post} key={post.id} />)}
+        : data.map((post) => <Post post={post} key={post.id}/>)}
     </div>
   );
 };
