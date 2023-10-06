@@ -77,6 +77,6 @@ Esse projeto foi desenvolvido utilizando os seguintes recursos:
 -  [React](https://pt-br.reactjs.org/);
 -  [React Router Dom](https://reactrouter.com/web/guides/quick-start);
 -  [Sass](https://styled-components.com/);
--  [Yup](https://github.com/jquense/yup).
+-  [Npm]().
 
 
