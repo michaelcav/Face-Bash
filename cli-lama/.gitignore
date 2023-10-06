@@ -3,6 +3,7 @@
 #other pathd
 ../client-typescript
 ../client
+../api-sequelize
 
 # dependencies
 /node_modules
