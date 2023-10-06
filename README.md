@@ -17,7 +17,7 @@
 
 
   <p align="center">
-    <img src="https://i.imgur.com/bV7p39v.png" width="50%" height="50%" max-width:100% >
+    <img src="https://i.imgur.com/LlHcEwK.png" width="50%" height="50%" max-width:100% >
   </p>
 
    <p align="center">
