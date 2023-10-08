@@ -6,7 +6,7 @@ import { makeRequest } from "../../axios";
 import moment from "moment";
 import DeleteIcon from '@mui/icons-material/Delete';
 
-const Comments = ({ postId }) => {
+const Comments = ({ postId, onCommentAdded, onCommentDeleted }) => {
   const [desc, setDesc] = useState("");
   const { currentUser } = useContext(AuthContext);
   const queryClient = useQueryClient();
@@ -48,14 +48,17 @@ const Comments = ({ postId }) => {
     }
   );
 
-  const handleDelete = (commentId) => {
-    deleteMutation.mutate(commentId);
-  };
-
   const handleClick = async (e) => {
     e.preventDefault();
     mutation.mutate({ desc, postId });
     setDesc("");
+    onCommentAdded(); // Adicione esta linha
+  };
+  
+
+  const handleDelete = (commentId) => {
+    deleteMutation.mutate(commentId);
+    onCommentDeleted(); // Adicione esta linha
   };
 
   return (

@@ -17,6 +17,7 @@ import { AuthContext } from "../../context/authContext";
 const Post = ({ post }) => {
   const [commentOpen, setCommentOpen] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [commentCount, setCommentCount] = useState(post.commentCount);
 
   const { currentUser } = useContext(AuthContext);
 
@@ -80,10 +81,10 @@ const Post = ({ post }) => {
           </div>
           <MoreHorizIcon onClick={() => setMenuOpen(!menuOpen)} />
           {menuOpen && post.userId === currentUser.id && (
-             < >
+            < >
               <DeleteIcon
-             onClick={handleDelete}/>
-              </>
+                onClick={handleDelete} />
+            </>
           )}
         </div>
         <div className="content">
@@ -106,14 +107,21 @@ const Post = ({ post }) => {
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />
-            desisto
+            {commentCount} {commentCount === 1 ? "comentário" : "comentários"}
           </div>
+
           <div className="item">
             <ShareOutlinedIcon />
             Share
           </div>
         </div>
-        {commentOpen && <Comments postId={post.id} />}
+        {commentOpen && (
+          <Comments
+            postId={post.id}
+            onCommentAdded={() => setCommentCount(commentCount + 1)}
+            onCommentDeleted={() => setCommentCount(commentCount - 1)}
+          />
+        )}
       </div>
     </div>
   );
