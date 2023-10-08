@@ -25,6 +25,7 @@ const Post = ({ post }) => {
     })
   );
 
+
   const queryClient = useQueryClient();
 
   const mutation = useMutation(
@@ -100,7 +101,6 @@ const Post = ({ post }) => {
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />
-            See Comments
           </div>
           <div className="item">
             <ShareOutlinedIcon />

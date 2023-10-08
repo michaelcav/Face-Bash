@@ -22,7 +22,6 @@ const Comments = ({ postId }) => {
       return res.data;
     })
   );
- 
 
   const mutation = useMutation(
     (newComment) => {
