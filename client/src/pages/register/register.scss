@@ -21,9 +21,7 @@
     }
 
     hr {
-      width: 100%;
-      margin-top: 10px;
-      background-color: #c49090;
+      
     }
 
     .right {
@@ -88,17 +86,10 @@
       margin-top: 20px;
     }
     
-    button {
-      margin-top: 10px;
-      width: 100%;
-      border-radius: 10px;
-      padding: 10px;
-      border: none;
-      background-color: #938eef;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
+    span.text-login {
+      color: #938eef;
     }
+    
   }
 
   @media (max-width: 768px) {

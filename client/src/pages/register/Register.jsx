@@ -79,7 +79,8 @@ export default function Register() {
               </div>
             ))}
             {errors.general && (
-              <p className="error" style={{ color: 'red', fontWeight: '400' }}>
+              <p className="error"
+               style={{ color: 'red', fontWeight: "300" }}>
                 {errors.general}
               </p>
             )}
@@ -95,8 +96,10 @@ export default function Register() {
         </div>
         <div className="left">
           <span>Você já tem uma conta?</span>
-          <Link to="/login">
-            <button>Login</button>
+          <Link 
+          to="/login"
+          style={{textDecoration: "none", color: "inherit"}}>
+            <span className='text-login'>faça o seu login</span>
           </Link>
         </div>
       </div>
