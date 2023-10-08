@@ -6,81 +6,106 @@
   justify-content: center;
 
   .card {
-    width: 50%;
+    width: 95%;
+    max-width: 600px;
     display: flex;
-    flex-direction: row-reverse;
+    align-items: center;
+    flex-direction: column;
     background-color: white;
     border-radius: 10px;
-    min-height: 600px;
     overflow: hidden;
 
-    .left {
-      flex: 1;
-      background: linear-gradient(rgba(39, 11, 96, 0.5), rgba(39, 11, 96, 0.5)),
-        url("https://images.pexels.com/photos/4881619/pexels-photo-4881619.jpeg?auto=compress&cs=tinysrgb&w=1600")
-          center;
-      background-size: cover;
-      padding: 50px;
-      display: flex;
-      flex-direction: column;
-      gap: 30px;
-      color: white;
+    .titulo {
+      margin-top: 20px;
+      color: #938eef
+    }
 
-      h1 {
-        font-size: 100px;
-        line-height: 100px;
-      }
-      
-      p {
-      }
-
-      span {
-        font-size: 14px;
-      }
-      
-      button {
-        width: 50%;
-        padding: 10px;
-        border: none;
-        background-color: white;
-        color: rebeccapurple;
-        font-weight: bold;
-        cursor: pointer;
-      }
+    hr {
+      width: 100%;
+      margin-top: 10px;
+      background-color: #c49090;
     }
 
     .right {
-      flex: 1;
-      padding: 50px;
+      padding: 20px;
+      gap: 20px;
       display: flex;
       flex-direction: column;
-      gap: 50px;
       justify-content: center;
+      align-items: center;
 
       h1 {
-      color: #555;
+        font-size:x-large;
+        color: #555;
       }
-      
+
       form {
         display: flex;
         flex-direction: column;
-        gap: 30px;
-        
-        input {
-        border: none;
-        border-bottom: 1px solid lightgray;
-        padding: 20px 10px;
+        align-items: center;
+        gap: 15px;
+       
+
+        div {
+          width: 100%;
+          max-width: 100%;
         }
-        
+
+        input {
+          border-radius: 10px;
+          width: 100%; // Ajuste a largura conforme desejado, por exemplo, width: 80%;
+          border: none;
+          border-bottom: 1px solid lightgray;
+          padding: 20px 10px;
+        }
+
         button {
-          width: 50%;
+          width: 100%;
+          border-radius: 10px;
           padding: 10px;
           border: none;
           background-color: #938eef;
           color: white;
           font-weight: bold;
           cursor: pointer;
+
+          --button-bg-color: #938eef;
+
+          &.disabled {
+            background-color: var(--button-bg-color);
+            opacity: 0.8;
+            cursor: not-allowed;
+          }
         }
+      }
+    }
+
+    .left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
+    
+    button {
+      margin-top: 10px;
+      width: 100%;
+      border-radius: 10px;
+      padding: 10px;
+      border: none;
+      background-color: #938eef;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .card {
+      .right {
+        padding: 10px;
+        gap: 10px;
       }
     }
   }
