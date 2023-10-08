@@ -4,6 +4,7 @@ import { AuthContext } from "../../context/authContext";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { makeRequest } from "../../axios";
 import moment from "moment";
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const Comments = ({ postId }) => {
   const [desc, setDesc] = useState("");
@@ -85,7 +86,11 @@ const Comments = ({ postId }) => {
               {moment(comment.createdAt).fromNow()}
             </span>
             {currentUser.id === comment.userId && (
-              <button onClick={() => handleDelete(comment.id)}>delete</button>
+              <>
+              <DeleteIcon 
+              style={{display: "flex", alignItems: "center", justifyContent: "center"}}
+              onClick={() => handleDelete(comment.id)}/>
+              </>
             )}
           </div>
         ))
